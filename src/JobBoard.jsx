@@ -33,9 +33,9 @@ export default function JobBoard() {
         );
 
         setJobs(jobsData);
-        // eslint-disable-next-line
+        // eslint-disable-next-line no-unused-vars
       } catch (error) {
-        // eslint-disable-next-line
+        // eslint-disable-next-line quotes
         setError(`Error: Jobs aren't loading.`);
       }
     }
