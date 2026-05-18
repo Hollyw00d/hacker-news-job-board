@@ -18,6 +18,11 @@ export default function JobBoard() {
         const resJobStories = await fetch(
           'https://hacker-news.firebaseio.com/v0/jobstories.json'
         );
+
+        if (!resJobStories.ok) {
+          throw new Error('Job stories not loading.');
+        }
+
         const dataJobStories = await resJobStories.json();
         setTotalJobs(dataJobStories.length);
 
@@ -28,6 +33,11 @@ export default function JobBoard() {
             const resJob = await fetch(
               `https://hacker-news.firebaseio.com/v0/item/${jobStory}.json`
             );
+
+            if (!resJob.ok) {
+              throw new Error('Job not loading.');
+            }
+
             return resJob.json();
           })
         );
