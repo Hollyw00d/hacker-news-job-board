@@ -21,6 +21,9 @@ export default function JobBoard() {
         setIsLoading(true);
         setError(null);
 
+        // Pause for 700 ms before executing URL fetch below
+        await new Promise((resolve) => setTimeout(resolve, 700));
+
         const resJobStories = await fetch(
           'https://hacker-news.firebaseio.com/v0/jobstories.json'
         );
