@@ -4,10 +4,12 @@ import ShowMoreBtn from './ShowMoreBtn';
 
 export default function JobBoard() {
   const jobsMaxStart = 6;
+
   const [totalJobs, setTotalJobs] = useState(null);
   const [jobsMax, setJobsMax] = useState(jobsMaxStart);
   const [jobs, setJobs] = useState([]);
   const [error, setError] = useState(null);
+
   const handlerLoadMoreJobs = () => {
     setJobsMax((prev) => prev + jobsMaxStart);
   };
