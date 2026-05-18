@@ -11,7 +11,7 @@ export default function JobBoard() {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handlerLoadMoreJobs = () => {
+  const handleLoadMoreJobs = () => {
     setJobsMax((prev) => prev + jobsMaxStart);
   };
 
@@ -74,7 +74,7 @@ export default function JobBoard() {
           {isLoading && <p>Loading jobs...</p>}
 
           {jobsMax < totalJobs && !isLoading && (
-            <ShowMoreBtn handlerLoadMoreJobs={handlerLoadMoreJobs} />
+            <ShowMoreBtn handleLoadMoreJobs={handleLoadMoreJobs} />
           )}
         </div>
       )}

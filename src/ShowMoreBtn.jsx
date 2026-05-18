@@ -1,7 +1,7 @@
-export default function ShowMoreBtn({ handlerLoadMoreJobs }) {
+export default function ShowMoreBtn({ handleLoadMoreJobs }) {
   return (
     <p>
-      <button onClick={handlerLoadMoreJobs}>Load more jobs</button>
+      <button onClick={handleLoadMoreJobs}>Load more jobs</button>
     </p>
   );
 }
