@@ -9,6 +9,7 @@ export default function JobBoard() {
   const [jobsMax, setJobsMax] = useState(jobsMaxStart);
   const [jobs, setJobs] = useState([]);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlerLoadMoreJobs = () => {
     setJobsMax((prev) => prev + jobsMaxStart);
@@ -17,6 +18,9 @@ export default function JobBoard() {
   useEffect(() => {
     async function fetchJobs() {
       try {
+        setIsLoading(true);
+        setError(null);
+
         const resJobStories = await fetch(
           'https://hacker-news.firebaseio.com/v0/jobstories.json'
         );
@@ -49,6 +53,8 @@ export default function JobBoard() {
       } catch (error) {
         // eslint-disable-next-line quotes
         setError(`Error: Jobs aren't loading.`);
+      } finally {
+        setIsLoading(false);
       }
     }
 
@@ -64,7 +70,10 @@ export default function JobBoard() {
       ) : (
         <div>
           <Jobs jobs={jobs} />
-          {jobsMax < totalJobs && (
+
+          {isLoading && <p>Loading jobs...</p>}
+
+          {jobsMax < totalJobs && !isLoading && (
             <ShowMoreBtn handlerLoadMoreJobs={handlerLoadMoreJobs} />
           )}
         </div>
