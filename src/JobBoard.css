@@ -1,0 +1,27 @@
+:root {
+  --black: #000;
+  --platinum-gray: #e5e4e2;
+  --btn-padding: 5px;
+  --btn-border-radius: 5px;
+  --border-width: 1px;
+  --border-style: solid;
+}
+
+button {
+  color: var(--black);
+  background-color: var(--platinum-gray);
+  padding: var(--btn-padding);
+  border-radius: var(--btn-border-radius);
+  border: var(--border-width) var(--border-style) var(--black);
+}
+
+.sr-only {
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  position: absolute;
+  overflow: hidden;
+}

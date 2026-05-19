@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Jobs from './Jobs';
 import ShowMoreBtn from './ShowMoreBtn';
+import './JobBoard.css';
 
 export default function JobBoard() {
   const jobsMaxStart = 6;

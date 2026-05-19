@@ -1,6 +1,12 @@
 export default function Jobs({ jobs }) {
+  const jobsLength = jobs.length;
+
   return (
     <>
+      <div role="alert" aria-live="assertive" className="sr-only">
+        Now showing {jobsLength} total jobs
+      </div>
+
       {jobs.map((job) => {
         const date = new Date(job.time * 1000);
         const dateStr = date.toLocaleString();
