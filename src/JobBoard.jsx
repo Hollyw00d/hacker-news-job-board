@@ -11,9 +11,11 @@ export default function JobBoard() {
   const [jobs, setJobs] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadMoreClicked, setIsLoadMoreClicked] = useState(false);
 
   const handleLoadMoreJobs = () => {
     setJobsMax((prev) => prev + jobsMaxStart);
+    setIsLoadMoreClicked(true);
   };
 
   useEffect(() => {
@@ -73,7 +75,11 @@ export default function JobBoard() {
         <p>{error}</p>
       ) : (
         <div>
-          <Jobs jobs={jobs} />
+          <Jobs
+            jobs={jobs}
+            isLoadMoreClicked={isLoadMoreClicked}
+            jobsMaxStart={jobsMaxStart}
+          />
 
           {isLoading && <p>Loading jobs...</p>}
 
