@@ -69,7 +69,7 @@ export default function JobBoard() {
 
   return (
     <div>
-      <h2>Hacker News Job Board</h2>
+      <h1>Hacker News Job Board</h1>
 
       {error ? (
         <p>{error}</p>
