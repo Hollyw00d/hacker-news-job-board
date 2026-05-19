@@ -11,7 +11,7 @@ export default function Jobs({ jobs, isLoadMoreClicked, jobsMaxStart }) {
 
   return (
     <>
-      <div role="alert" aria-live="assertive" className="sr-only">
+      <div role="status" aria-live="polite" className="sr-only">
         Now showing {jobs.length} total jobs
       </div>
 
@@ -25,7 +25,7 @@ export default function Jobs({ jobs, isLoadMoreClicked, jobsMaxStart }) {
 
           return (
             <li key={job.id}>
-              <h3>
+              <h2>
                 <a
                   href={job.url}
                   tabIndex={0}
@@ -33,7 +33,7 @@ export default function Jobs({ jobs, isLoadMoreClicked, jobsMaxStart }) {
                 >
                   {job.title}
                 </a>
-              </h3>
+              </h2>
               <p>
                 By {job.by} &bull; {dateStr}
               </p>
