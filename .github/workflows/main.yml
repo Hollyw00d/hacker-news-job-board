@@ -6,9 +6,6 @@ on:
       - main
   workflow_dispatch:
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 permissions:
   contents: read
   pages: write
@@ -43,14 +40,24 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Create Pages artifact
+        run: |
+          tar --dereference --hard-dereference \
+            --directory dist \
+            -czf github-pages.tar.gz .
+
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
-          path: ./dist
+          name: github-pages
+          path: github-pages.tar.gz
+          retention-days: 1
+          if-no-files-found: error
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
