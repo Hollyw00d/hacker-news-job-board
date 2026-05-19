@@ -3,8 +3,18 @@
   --platinum-gray: #e5e4e2;
   --btn-padding: 5px;
   --btn-border-radius: 5px;
+  --btn-outline-offset: -4px;
   --border-width: 1px;
   --border-style: solid;
+  --focus-width: 1.25px;
+  --focus-style: dashed;
+}
+
+button,
+a {
+  &:focus {
+    outline: var(--focus-width) var(--focus-style) currentColor;
+  }
 }
 
 button {
@@ -13,6 +23,10 @@ button {
   padding: var(--btn-padding);
   border-radius: var(--btn-border-radius);
   border: var(--border-width) var(--border-style) var(--black);
+
+  &:focus {
+    outline-offset: var(--btn-outline-offset);
+  }
 }
 
 .sr-only {
