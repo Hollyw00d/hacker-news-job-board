@@ -13,7 +13,9 @@ export default function Jobs({ jobs }) {
         return (
           <div key={job.id}>
             <h3>
-              <a href={job.url}>{job.title}</a>
+              <a href={job.url} tabIndex={0}>
+                {job.title}
+              </a>
             </h3>
             <p>
               By {job.by} &bull; {dateStr}
