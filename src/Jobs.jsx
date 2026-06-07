@@ -28,7 +28,6 @@ export default function Jobs({ jobs, isLoadMoreClicked, jobsMaxStart }) {
               <h2>
                 <a
                   href={job.url}
-                  tabIndex={0}
                   ref={isfirstOfFetchedJobs ? firstOfFetchedJobs : null}
                 >
                   {job.title}
