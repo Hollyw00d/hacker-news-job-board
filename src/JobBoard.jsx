@@ -22,7 +22,7 @@ export default function JobBoard() {
       );
 
       if (!resJobStories.ok) {
-        throw new Error('Job stories not loading.');
+        throw new Error('Error: Job stories are not loading.');
       }
 
       const dataJobStories = await resJobStories.json();
