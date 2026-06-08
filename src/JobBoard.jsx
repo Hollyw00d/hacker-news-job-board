@@ -1,25 +1,19 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import Jobs from './Jobs';
 import ShowMoreBtn from './ShowMoreBtn';
 import './JobBoard.css';
 
 export default function JobBoard() {
   const jobsMaxStart = 6;
-
-  const [totalJobs, setTotalJobs] = useState(null);
-  const [jobsMax, setJobsMax] = useState(jobsMaxStart);
-  // const [jobs, setJobs] = useState([]);
-  // const [error, setError] = useState(null);
-  // const [isLoading, setIsLoading] = useState(false);
   const [isLoadMoreClicked, setIsLoadMoreClicked] = useState(false);
 
   const handleLoadMoreJobs = () => {
-    setJobsMax((prev) => prev + jobsMaxStart);
+    fetchNextPage();
     setIsLoadMoreClicked(true);
   };
 
-  async function fetchJobs() {
+  async function fetchJobs({ pageParam = 0 }) {
     try {
       await new Promise((resolve) => setTimeout(resolve, 200));
 
@@ -32,11 +26,7 @@ export default function JobBoard() {
       }
 
       const dataJobStories = await resJobStories.json();
-
-      setTotalJobs(dataJobStories.length);
-
-      const jobIds = dataJobStories.slice(0, jobsMax);
-
+      const jobIds = dataJobStories.slice(pageParam, pageParam + jobsMaxStart);
       const jobsData = await Promise.all(
         jobIds.map(async (jobStory) => {
           const resJob = await fetch(
@@ -50,7 +40,12 @@ export default function JobBoard() {
           return resJob.json();
         })
       );
-      return jobsData;
+
+      return {
+        jobs: jobsData,
+        nextPage: pageParam + jobsMaxStart,
+        totalJobs: dataJobStories.length
+      };
     } catch (error) {
       // eslint-disable-next-line quotes
       throw new Error("Error: Jobs aren't loading", { cause: error });
@@ -58,69 +53,31 @@ export default function JobBoard() {
   }
 
   const {
+    data,
     isLoading,
-    data: jobs,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
     error
-  } = useQuery({
+  } = useInfiniteQuery({
     queryKey: ['jobs'],
-    queryFn: () => fetchJobs()
+    queryFn: fetchJobs,
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      return lastPage.nextPage < lastPage.totalJobs
+        ? lastPage.nextPage
+        : undefined;
+    }
   });
 
-  // useEffect(() => {
-  //   async function fetchJobs() {
-  //     try {
-  //       setIsLoading(true);
-  //       setError(null);
-
-  //       // Pause for 200 ms before executing URL fetch below
-  //       await new Promise((resolve) => setTimeout(resolve, 200));
-
-  //       const resJobStories = await fetch(
-  //         'https://hacker-news.firebaseio.com/v0/jobstories.json'
-  //       );
-
-  //       if (!resJobStories.ok) {
-  //         throw new Error('Job stories not loading.');
-  //       }
-
-  //       const dataJobStories = await resJobStories.json();
-  //       setTotalJobs(dataJobStories.length);
-
-  //       const jobIds = dataJobStories.slice(0, jobsMax);
-
-  //       const jobsData = await Promise.all(
-  //         jobIds.map(async (jobStory) => {
-  //           const resJob = await fetch(
-  //             `https://hacker-news.firebaseio.com/v0/item/${jobStory}.json`
-  //           );
-
-  //           if (!resJob.ok) {
-  //             throw new Error('Job not loading.');
-  //           }
-
-  //           return resJob.json();
-  //         })
-  //       );
-
-  //       setJobs(jobsData);
-  //       // eslint-disable-next-line no-unused-vars
-  //     } catch (error) {
-  //       // eslint-disable-next-line quotes
-  //       setError(`Error: Jobs aren't loading.`);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   }
-
-  //   fetchJobs();
-  // }, [jobsMax]);
+  const jobs = data?.pages.flatMap((page) => page.jobs) ?? [];
 
   return (
     <div>
       <h1>Hacker News Job Board</h1>
 
       {error ? (
-        <p>{error}</p>
+        <p>{error.message}</p>
       ) : (
         <div>
           <Jobs
@@ -131,7 +88,9 @@ export default function JobBoard() {
 
           {isLoading && <p>Loading jobs...</p>}
 
-          {jobsMax < totalJobs && !isLoading && (
+          {isFetchingNextPage && <p>Loading more jobs...</p>}
+
+          {hasNextPage && !isFetchingNextPage && (
             <ShowMoreBtn handleLoadMoreJobs={handleLoadMoreJobs} />
           )}
         </div>
