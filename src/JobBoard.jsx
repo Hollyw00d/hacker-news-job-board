@@ -70,7 +70,15 @@ export default function JobBoard() {
     }
   });
 
-  const jobs = data?.pages.flatMap((page) => page.jobs) ?? [];
+  const jobs =
+    data?.pages
+      .flatMap((page) => page.jobs)
+      .filter((jobs) => {
+        const { id, url, title, by, time } = jobs;
+        if (id && url && title && by && time) {
+          return jobs;
+        }
+      }) ?? [];
 
   return (
     <div>

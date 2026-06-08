@@ -17,27 +17,31 @@ export default function Jobs({ jobs, isLoadMoreClicked, jobsMaxStart }) {
 
       <ol>
         {jobs.map((job, i) => {
-          const date = new Date(job.time * 1000);
+          const { id, url, title, by, time } = job;
+
+          // if (id && url && title && by && time) {
+          const date = new Date(time * 1000);
           const dateStr = date.toLocaleString();
 
           const isfirstOfFetchedJobs =
             i === firstOfFetchedJobsIdx && isLoadMoreClicked;
 
           return (
-            <li key={job.id}>
+            <li key={id}>
               <h2>
                 <a
-                  href={job.url}
+                  href={url}
                   ref={isfirstOfFetchedJobs ? firstOfFetchedJobs : null}
                 >
-                  {job.title}
+                  {title}
                 </a>
               </h2>
               <p>
-                By {job.by} &bull; {dateStr}
+                By {by} &bull; {dateStr}
               </p>
             </li>
           );
+          // }
         })}
       </ol>
     </>
