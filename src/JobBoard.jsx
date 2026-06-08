@@ -26,20 +26,32 @@ export default function JobBoard() {
       }
 
       const dataJobStories = await resJobStories.json();
-      const jobIds = dataJobStories.slice(pageParam, pageParam + jobsMaxStart);
-      const jobsData = await Promise.all(
-        jobIds.map(async (jobStory) => {
-          const resJob = await fetch(
-            `https://hacker-news.firebaseio.com/v0/item/${jobStory}.json`
-          );
 
-          if (!resJob.ok) {
-            throw new Error('Job not loading.');
-          }
+      const jobsData = [];
+      let currentIndex = pageParam;
 
-          return resJob.json();
-        })
-      );
+      while (
+        jobsData.length < jobsMaxStart &&
+        currentIndex < dataJobStories.length
+      ) {
+        const jobStory = dataJobStories[currentIndex];
+
+        const resJob = await fetch(
+          `https://hacker-news.firebaseio.com/v0/item/${jobStory}.json`
+        );
+
+        if (!resJob.ok) {
+          throw new Error('Job is not loading.');
+        }
+
+        const job = await resJob.json();
+        const { id, url, title, by, time } = job;
+        if (id && url && title && by && time) {
+          jobsData.push(job);
+        }
+
+        currentIndex++;
+      }
 
       return {
         jobs: jobsData,
@@ -70,15 +82,7 @@ export default function JobBoard() {
     }
   });
 
-  const jobs =
-    data?.pages
-      .flatMap((page) => page.jobs)
-      .filter((jobs) => {
-        const { id, url, title, by, time } = jobs;
-        if (id && url && title && by && time) {
-          return jobs;
-        }
-      }) ?? [];
+  const jobs = data?.pages.flatMap((page) => page.jobs) ?? [];
 
   return (
     <div>
