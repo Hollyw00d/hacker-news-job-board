@@ -18,8 +18,6 @@ export default function Jobs({ jobs, isLoadMoreClicked, jobsMaxStart }) {
       <ol>
         {jobs.map((job, i) => {
           const { id, url, title, by, time } = job;
-
-          // if (id && url && title && by && time) {
           const date = new Date(time * 1000);
           const dateStr = date.toLocaleString();
 
@@ -41,7 +39,6 @@ export default function Jobs({ jobs, isLoadMoreClicked, jobsMaxStart }) {
               </p>
             </li>
           );
-          // }
         })}
       </ol>
     </>
