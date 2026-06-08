@@ -48,7 +48,7 @@ export default function JobBoard() {
       };
     } catch (error) {
       // eslint-disable-next-line quotes
-      throw new Error("Error: Jobs aren't loading", { cause: error });
+      throw new Error("Error: Jobs aren't loading.", { cause: error });
     }
   }
 
